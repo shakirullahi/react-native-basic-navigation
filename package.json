@@ -7,13 +7,15 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "fake-server": "json-server --watch db.json"
   },
   "dependencies": {
     "react": "17.0.1",
     "react-native": "0.64.2",
     "react-native-navigation": "^7.16.0",
-    "react-native-svg": "^12.1.1"
+    "react-native-svg": "^12.1.1",
+    "remx": "^4.0.108-rc.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

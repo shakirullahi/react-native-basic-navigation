@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, FlatList, Text, StyleSheet} from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import {connect} from 'remx';
+import {postsStore} from '../posts.store';
+import * as postsActions from '../posts.actions';
 
 class PostsList extends Component {
   constructor(props) {
@@ -9,6 +12,10 @@ class PostsList extends Component {
     Navigation.events().bindComponent(this);
 
     this.pushViewPostScreen = this.pushViewPostScreen.bind(this);
+  }
+
+  componentDidMount() {
+    postsActions.fetchPosts();
   }
 
   static get options() {
@@ -26,6 +33,7 @@ class PostsList extends Component {
 
   static propTypes = {
     componentId: PropTypes.string,
+    posts: PropTypes.array,
   };
 
   navigationButtonPressed({buttonId}) {
@@ -40,6 +48,7 @@ class PostsList extends Component {
         name: 'blog.ViewPost',
         passProps: {
           somePropToPass: 'Some props that we are passing',
+          post,
         },
         options: {
           topBar: {
@@ -66,18 +75,33 @@ class PostsList extends Component {
     });
   }
 
+  renderItem = ({item}) => (
+    <Text onPress={() => this.pushViewPostScreen(item)}>{item.title}</Text>
+  );
+
+  postKeyExtractor = item => `${item.id}-key`;
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text} onPress={this.pushViewPostScreen}>
-          PostsList Screen
-        </Text>
+        <Text style={styles.text}>PostsList Screen</Text>
+        <FlatList
+          data={this.props.posts}
+          keyExtractor={this.postKeyExtractor}
+          renderItem={this.renderItem}
+        />
       </View>
     );
   }
 }
 
-export default PostsList;
+export default connect(mapStateToProps)(PostsList);
+
+function mapStateToProps() {
+  return {
+    posts: postsStore.getPosts(),
+  };
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -85,6 +109,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#D3EDFF',
+    alignItems: 'stretch',
   },
   text: {
     fontSize: 28,
