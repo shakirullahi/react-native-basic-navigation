@@ -1,17 +1,22 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import * as postsActions from '../posts.actions';
 
 const ViewPost = props => {
-  console.log(props);
-  const deletePost = () => {
+  const onPostDeletePressed = id => {
     Navigation.pop(props.componentId);
+    postsActions.deletePost(id);
   };
   return (
     <View style={styles.container}>
       <Text style={styles.text}>ViewPost Screen</Text>
       <Text style={styles.text}>{props.post.title}</Text>
-      <Text style={styles.delete} onPress={deletePost}>
+      <Text
+        style={styles.delete}
+        onPress={() => {
+          onPostDeletePressed(props.post.id);
+        }}>
         Delete
       </Text>
     </View>

@@ -18,3 +18,10 @@ export async function addPost(post) {
   const postToAdd = await response.json();
   postsStore.addPost(postToAdd);
 }
+
+export async function deletePost(id) {
+  await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+    method: 'DELETE',
+  });
+  postsStore.deletePost(id);
+}

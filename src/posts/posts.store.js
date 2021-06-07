@@ -17,6 +17,9 @@ const setters = remx.setters({
   addPost(post) {
     state.posts = [...state.posts, post];
   },
+  deletePost(id) {
+    state.posts = state.posts.filter(post => post.id !== id);
+  },
 });
 
 export const postsStore = {
