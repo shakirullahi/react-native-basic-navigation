@@ -42,7 +42,7 @@ class PostsList extends Component {
     }
   }
 
-  pushViewPostScreen() {
+  pushViewPostScreen(post) {
     Navigation.push(this.props.componentId, {
       component: {
         name: 'blog.ViewPost',
