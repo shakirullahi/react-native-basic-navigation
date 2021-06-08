@@ -1,86 +1,71 @@
 import React, {Component} from 'react';
-import {StyleSheet, Button} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import * as postsActions from '../posts.actions';
-import {
-  Colors,
-  Typography,
-  Spacings,
-  View,
-  Text,
-  Card,
-} from 'react-native-ui-lib';
-import {ThemeManager} from 'react-native-ui-lib';
+import {View, Text, Button} from 'react-native-ui-lib';
 
-Colors.loadColors({
-  primaryColor: '#2364AA',
-  secondaryColor: '#81C3D7',
-  textColor: '##221D23',
-  errorColor: '#E63B2E',
-  successColor: '#ADC76F',
-  warnColor: '##FF963C',
-});
+class ViewPost extends Component {
+  constructor(props) {
+    super(props);
+    Navigation.events().bindComponent(this);
 
-Typography.loadTypographies({
-  heading: {fontSize: 36, fontWeight: '600'},
-  subheading: {fontSize: 28, fontWeight: '500'},
-  body: {fontSize: 18, fontWeight: '400'},
-});
-
-Spacings.loadSpacings({
-  page: 20,
-  card: 12,
-  gridGutter: 16,
-});
-
-// with plain object
-ThemeManager.setComponentTheme('Card', {
-  borderRadius: 8,
-});
-
-// with a dynamic function
-ThemeManager.setComponentTheme('Button', (props, context) => {
-  // 'square' is not an original Button prop, but a custom prop that can
-  // be used to create different variations of buttons in your app
-  if (props.square) {
-    return {
-      borderRadius: 0,
-    };
+    this.onPostDeletePressed = this.onPostDeletePressed.bind(this);
   }
-});
 
-const ViewPost = props => {
-  const onPostDeletePressed = () => {
-    Navigation.pop(props.componentId);
-    postsActions.deletePost(props.post.id);
+  onPostDeletePressed = () => {
+    Navigation.pop(this.props.componentId);
+    postsActions.deletePost(this.props.post.id);
   };
 
-  const {title} = props.post;
+  navigationButtonPressed({buttonId}) {
+    // alert('aaa');
+    if (buttonId === 'sideMenu') {
+      // Navigation.dismissModal(this.props.componentId);
+      Navigation.mergeOptions(this.props.componentId, {
+        sideMenu: {
+          left: {
+            visible: true,
+          },
+        },
+      });
+    }
+  }
 
-  return (
-    <View flex spread padding-24>
-      <View>
-        <Text text30 purple10>
-          {title}
-        </Text>
-        <Text text70 dark20 marginT-12>
-          {title}
-        </Text>
+  render() {
+    const {title} = this.props.post;
+    return (
+      <View flex spread padding-40>
+        <View>
+          <Text text30 purple10>
+            {title}
+          </Text>
+          <Text text70 dark20 marginT-12>
+            {title}
+          </Text>
+        </View>
+        <Button
+          text80
+          red20
+          bg-red70
+          fullWidth
+          label="Delete Post"
+          onPress={this.onPostDeletePressed}
+          color={'red'}
+        />
       </View>
-      <Button title="Delete Post" onPress={onPostDeletePressed} color={'red'} />
-    </View>
-    // <View style={styles.container}>
-    //   <Text style={styles.text}>ViewPost Screen</Text>
-    //   <Text style={styles.text}>{props.post.title}</Text>
-    //   <Text
-    //     style={styles.delete}
-    //     onPress={() => {
-    //       onPostDeletePressed(props.post.id);
-    //     }}>
-    //     Delete
-    //   </Text>
-    // </View>
-  );
+    );
+  }
+}
+
+ViewPost.options = {
+  topBar: {
+    leftButtons: [
+      {
+        id: 'sideMenu',
+        text: 'SideMenu',
+      },
+    ],
+  },
 };
 
 export default ViewPost;

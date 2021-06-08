@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TextInput} from 'react-native';
+import {StyleSheet, TextInput} from 'react-native';
 import PropTypes from 'prop-types';
 import {Navigation} from 'react-native-navigation';
 import * as postsActions from '../posts.actions';
+import {Text, TextField, View} from 'react-native-ui-lib';
 
 class AddPost extends Component {
   static propTypes = {
@@ -66,7 +67,15 @@ class AddPost extends Component {
 
   navigationButtonPressed({buttonId}) {
     if (buttonId === 'cancelBtn') {
-      Navigation.dismissModal(this.props.componentId);
+      // alert('aaa');
+      // Navigation.dismissModal(this.props.componentId);
+      Navigation.mergeOptions(this.props.componentId, {
+        sideMenu: {
+          left: {
+            visible: true,
+          },
+        },
+      });
     } else if (buttonId === 'saveBtn') {
       this.onSavePressed();
     }
@@ -83,17 +92,24 @@ class AddPost extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.text}>AddPost Screen</Text>
-        <TextInput
+      <View flex centerV>
+        <Text flex center>
+          AddPost Screen
+        </Text>
+        <TextField
+          text70
+          containerStyle={{marginBottom: 12}}
+          floatingPlaceholder
           placeholder="Add a Catchy Title"
-          value={this.state.title}
           onChangeText={this.onChangeTitle}
+          floatOnFocus
         />
-        <TextInput
+        <TextField
+          text70
+          floatingPlaceholder
           placeholder="This is the beginning of a great post"
-          value={this.state.text}
           onChangeText={this.onChangeText}
+          expandable
         />
       </View>
     );

@@ -17,4 +17,8 @@ export function registerScreens() {
     'blog.TestMenu',
     () => require('./posts/screens/TestMenu').default,
   );
+  Navigation.registerComponent(
+    'navigation.Drawer',
+    () => require('./sideMenu/Drawer').default,
+  );
 }
